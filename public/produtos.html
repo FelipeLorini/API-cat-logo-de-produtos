@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .header { background: rgba(0,0,0,0.3); padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .header h1 { background: linear-gradient(90deg, #2979ff, #0f3460); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .container { max-width: 700px; margin: 30px auto; padding: 20px; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+        input::placeholder, textarea::placeholder { color: #aaa; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 8px; border: none; font-size: 14px; transition: transform 0.2s; }
+        button:hover { transform: translateY(-2px); }
+        .btn-criar { background: #00c853; color: white; }
+        .btn-editar { background: #ff9100; color: white; }
+        .btn-excluir { background: #ff1744; color: white; }
+        .btn-salvar { background: #2979ff; color: white; }
+        .btn-cancelar { background: #6c757d; color: white; }
+        .btn-atualizar { background: #17a2b8; color: white; }
+        .produto {
+            background: rgba(255,255,255,0.08);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #2979ff;
+        }
+        .produto strong { font-size: 1.1em; }
+        .acoes { margin-top: 10px; }
+        #form-edicao { display: none; background: rgba(255,255,255,0.05); padding: 20px; margin: 20px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        #msg { margin: 10px 0; padding: 10px; text-align: center; }
+        a { color: #2979ff; text-decoration: none; }
+        a:hover { color: white; }
+        .links { margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Gerenciar Produtos</h1>
+    </div>
+    <div class="container">
+        <div id="form-edicao">
+            <h3 id="titulo-form">Criar Produto</h3>
+            <input type="hidden" id="produtoId">
+            <input type="text" id="nome" placeholder="Nome do produto">
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="number" id="preco" placeholder="Preço" step="0.01">
+            <input type="text" id="categoria" placeholder="Categoria">
+            <button class="btn-salvar" onclick="salvarProduto()">Salvar</button>
+            <button class="btn-cancelar" onclick="cancelarEdicao()">Cancelar</button>
+        </div>
+        <p id="msg"></p>
+        <button class="btn-criar" onclick="mostrarFormCriar()">Novo Produto</button>
+        <button class="btn-atualizar" onclick="carregarProdutos()">Atualizar Lista</button>
+        <div id="lista-produtos"></div>
+        <div class="links">
+            <a href="/">Voltar</a> | <a href="#" onclick="logout()" style="color:#ff1744;">Sair</a>
+        </div>
+    </div>
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) { window.location.href = '/login.html'; }
+        async function carregarProdutos() {
+            try {
+                const res = await fetch('/api/produtos');
+                const data = await res.json();
+                const produtos = data.dados || data;
+                const lista = document.getElementById('lista-produtos');
+                lista.innerHTML = '<h3>Lista de Produtos:</h3>';
+                if (produtos.length === 0) { lista.innerHTML += '<p>Nenhum produto cadastrado.</p>'; return; }
+                produtos.forEach(p => {
+                    lista.innerHTML += `
+                        <div class="produto">
+                            <strong>${p.nome}</strong> - R$ ${p.preco}<br>
+                            ${p.descricao}<br>
+                            <small>Categoria: ${p.categoria}</small>
+                            <div class="acoes">
+                                <button class="btn-editar" onclick="editarProduto('${p._id}', '${p.nome}', '${p.descricao}', ${p.preco}, '${p.categoria}')">Editar</button>
+                                <button class="btn-excluir" onclick="excluirProduto('${p._id}')">Excluir</button>
+                            </div>
+                        </div>`;
+                });
+            } catch (err) { document.getElementById('msg').innerHTML = 'Erro ao carregar produtos'; }
+        }
+        function mostrarFormCriar() {
+            document.getElementById('form-edicao').style.display = 'block';
+            document.getElementById('titulo-form').innerHTML = 'Criar Produto';
+            document.getElementById('produtoId').value = '';
+            document.getElementById('nome').value = '';
+            document.getElementById('descricao').value = '';
+            document.getElementById('preco').value = '';
+            document.getElementById('categoria').value = '';
+        }
+        function editarProduto(id, nome, descricao, preco, categoria) {
+            document.getElementById('form-edicao').style.display = 'block';
+            document.getElementById('titulo-form').innerHTML = 'Editar Produto';
+            document.getElementById('produtoId').value = id;
+            document.getElementById('nome').value = nome;
+            document.getElementById('descricao').value = descricao;
+            document.getElementById('preco').value = preco;
+            document.getElementById('categoria').value = categoria;
+        }
+        function cancelarEdicao() { document.getElementById('form-edicao').style.display = 'none'; }
+        async function salvarProduto() {
+            const id = document.getElementById('produtoId').value;
+            const nome = document.getElementById('nome').value;
+            const descricao = document.getElementById('descricao').value;
+            const preco = document.getElementById('preco').value;
+            const categoria = document.getElementById('categoria').value;
+            if (!nome || !descricao || !preco || !categoria) { document.getElementById('msg').innerHTML = 'Preencha todos os campos!'; return; }
+            const url = id ? `/api/produtos/${id}` : '/api/produtos';
+            const method = id ? 'PUT' : 'POST';
+            try {
+                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ nome, descricao, preco: Number(preco), categoria }) });
+                if (res.ok) { document.getElementById('msg').innerHTML = id ? 'Produto atualizado!' : 'Produto criado!'; cancelarEdicao(); carregarProdutos(); }
+                else { const data = await res.json(); document.getElementById('msg').innerHTML = data.mensagem || 'Erro ao salvar'; }
+            } catch (err) { document.getElementById('msg').innerHTML = 'Erro de conexão'; }
+        }
+        async function excluirProduto(id) {
+            if (!confirm('Tem certeza que deseja excluir?')) return;
+            try {
+                const res = await fetch(`/api/produtos/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.ok) { document.getElementById('msg').innerHTML = 'Produto excluído!'; carregarProdutos(); }
+                else { document.getElementById('msg').innerHTML = 'Erro ao excluir'; }
+            } catch (err) { document.getElementById('msg').innerHTML = 'Erro de conexão'; }
+        }
+        function logout() { localStorage.removeItem('token'); window.location.href = '/login.html'; }
+        carregarProdutos();
+    </script>
+</body>
+</html>
