@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Produtos</title>
+</head>
+<body>
+    <h1>Teste API Produtos</h1>
+    <button onclick="testar()">Carregar Produtos</button>
+    <pre id="resultado"></pre>
+
+    <script>
+        async function testar() {
+            try {
+                const res = await fetch('/api/produtos');
+                const data = await res.json();
+                document.getElementById('resultado').textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                document.getElementById('resultado').textContent = 'Erro: ' + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
