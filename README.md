@@ -1,8 +1,8 @@
-# 🛍️ API REST – Catálogo de Produtos
+#  API REST – Catálogo de Produtos
 
 API REST desenvolvida com **Node.js**, **Express** e **MongoDB** como atividade avaliativa da disciplina de desenvolvimento back-end.
 
-## 🗂️ Estrutura do Projeto (MVC)
+##  Estrutura do Projeto (MVC)
 
 ```
 src/
@@ -23,7 +23,7 @@ src/
 └── server.js              # Ponto de entrada da aplicação
 ```
 
-## ⚙️ Como Rodar o Projeto
+##  Como Rodar o Projeto
 
 ### Pré-requisitos
 
@@ -53,7 +53,7 @@ O servidor estará disponível em `http://localhost:3000`.
 
 ---
 
-## 🔐 Variáveis de Ambiente
+##  Variáveis de Ambiente
 
 Copie o arquivo `.env.example` para `.env` e preencha os valores:
 
@@ -67,7 +67,7 @@ Copie o arquivo `.env.example` para `.env` e preencha os valores:
 
 ---
 
-## 📡 Endpoints da API
+##  Endpoints da API
 
 ### Autenticação
 
@@ -144,7 +144,7 @@ Copie o arquivo `.env.example` para `.env` e preencha os valores:
 
 ---
 
-## 🛡️ Segurança Implementada
+##  Segurança Implementada
 
 - **BCrypt**: senhas criptografadas com salt de 12 rounds antes de salvar no banco.
 - **JWT**: autenticação stateless com tokens de acesso.
@@ -154,7 +154,7 @@ Copie o arquivo `.env.example` para `.env` e preencha os valores:
 
 ---
 
-## 🌿 GitFlow Utilizado
+##  GitFlow Utilizado
 
 ```
 main        → versão estável e em produção
@@ -169,7 +169,7 @@ develop     → integração das funcionalidades
 
 ---
 
-## 🧪 Exemplo de Teste com cURL
+##  Exemplo de Teste com cURL
 
 ```bash
 # 1. Registrar usuário
@@ -194,7 +194,7 @@ curl http://localhost:3000/api/produtos
 
 ---
 
-## 📦 Dependências
+##  Dependências
 
 | Pacote                  | Finalidade                                      |
 |-------------------------|-------------------------------------------------|
