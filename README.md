@@ -71,10 +71,10 @@ Copie o arquivo `.env.example` para `.env` e preencha os valores:
 
 ### Autenticação
 
-| Método | Rota                   | Descrição              | Auth? |
-|--------|------------------------|------------------------|-------|
-| POST   | `/api/auth/registro`   | Cadastra novo usuário  | ❌    |
-| POST   | `/api/auth/login`      | Realiza login          | ❌    |
+| Método | Rota                   | Descrição             
+|--------|------------------------|------------------------
+| POST   | `/api/auth/registro`   | Cadastra novo usuário  
+| POST   | `/api/auth/login`      | Realiza login          
 
 #### Registro – Body esperado:
 ```json
@@ -109,13 +109,13 @@ Copie o arquivo `.env.example` para `.env` e preencha os valores:
 > Rotas de **criação, edição e exclusão** requerem autenticação.  
 > Envie o token no header: `Authorization: Bearer <seu_token>`
 
-| Método | Rota               | Descrição                       | Auth? |
-|--------|--------------------|---------------------------------|-------|
-| GET    | `/api/produtos`    | Lista todos os produtos         | ❌    |
-| GET    | `/api/produtos/:id`| Busca um produto pelo ID        | ❌    |
-| POST   | `/api/produtos`    | Cria um novo produto            | ✅    |
-| PUT    | `/api/produtos/:id`| Atualiza um produto             | ✅    |
-| DELETE | `/api/produtos/:id`| Remove um produto (soft delete) | ✅    |
+| Método | Rota               | Descrição                       
+|--------|--------------------|---------------------------------
+| GET    | `/api/produtos`    | Lista todos os produtos         
+| GET    | `/api/produtos/:id`| Busca um produto pelo ID       
+| POST   | `/api/produtos`    | Cria um novo produto           
+| PUT    | `/api/produtos/:id`| Atualiza um produto             
+| DELETE | `/api/produtos/:id`| Remove um produto (soft delete) 
 
 #### Criar / Atualizar Produto – Body esperado:
 ```json
